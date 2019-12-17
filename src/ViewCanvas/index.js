@@ -49,6 +49,8 @@ export default () => {
       bounds="window"
       onDragStart={e => {
         busy = true;
+        console.log(e);
+        // e.nativeEvent.dataTransfer.setData("text/plain", "moving....");
       }}
       onDragStop={(e, data) => {
         console.log(data);

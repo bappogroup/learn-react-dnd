@@ -164,7 +164,9 @@ export default DropTarget(
     {
       beginDrag: props => ({
         id: props.id,
-        index: props.index
+        index: props.index,
+        text: props.text,
+        type: ItemTypes.CARD,
       })
     },
     (connect, monitor) => ({
