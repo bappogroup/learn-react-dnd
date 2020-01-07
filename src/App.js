@@ -7,29 +7,51 @@ import HTML5Backend from "react-dnd-html5-backend";
 import TestDragAndResize from "./testDragAndResize";
 import ComponentList from "./ComponentList";
 import { useState, useRef } from "react";
-import { useDrag, useDrop, useDragLayer } from 'react-dnd';
+import { useDrag, useDrop, useDragLayer } from "react-dnd";
 import styles from "./testDragAndResize/styles";
 import NestedBlocks from "./NestedBlocks";
+import Button from "./NestedBlocks/Button";
 
 const DragLayer = ({ isDragging }) => {
   const cpr = useDragLayer(monitor => ({
-        item: monitor.getItem(),
-		initialOffset: monitor.getInitialSourceClientOffset(),
-		currentOffset: monitor.getSourceClientOffset(),
-		isDragging: monitor.isDragging(),
-	})
-  )
+    item: monitor.getItem(),
+    initialOffset: monitor.getInitialSourceClientOffset(),
+    currentOffset: monitor.getSourceClientOffset(),
+    isDragging: monitor.isDragging()
+  }));
 
   if (!cpr.isDragging || !cpr.currentOffset) return null;
   if (!cpr.item || cpr.item.type !== "treenode") return null;
 
-  return <div
-    style={{ left: cpr.currentOffset.x, top: cpr.currentOffset.y, position: "absolute", ...styles.draglayer }}
-  > 
-    {cpr.item.text}
-  </div>
-}
+  if (cpr.item.text === "Button") {
+    return (
+      <div
+        style={{
+          left: cpr.currentOffset.x,
+          top: cpr.currentOffset.y,
+          position: "absolute",
+          opacity: 0.6,
+          transform: "rotate(-5deg)"
+        }}
+      >
+        <Button />
+      </div>
+    );
+  }
 
+  return (
+    <div
+      style={{
+        left: cpr.currentOffset.x,
+        top: cpr.currentOffset.y,
+        position: "absolute",
+        ...styles.draglayer
+      }}
+    >
+      {cpr.item.text}
+    </div>
+  );
+};
 
 function App() {
   return (
@@ -47,17 +69,25 @@ function App() {
         }}
       >
         <div style={{ width: 100, background: "#334", position: "relative" }}>
-            <ComponentList />
+          <ComponentList />
         </div>
         <div style={{ flex: 1, background: "#eef", position: "relative" }}>
-            <NestedBlocks />
+          <NestedBlocks />
         </div>
-        <div style={{position: "fixed", top: 0, left: 0, bottom: 0, right: 0,  pointerEvents: 'none'}}>
+        <div
+          style={{
+            position: "fixed",
+            top: 0,
+            left: 0,
+            bottom: 0,
+            right: 0,
+            pointerEvents: "none"
+          }}
+        >
           <DragLayer />
         </div>
       </div>
     </DndProvider>
-
   );
 }
 

@@ -1,29 +1,54 @@
 import React, { useEffect } from "react";
-import {useDrag} from "react-dnd";
-import { getEmptyImage } from 'react-dnd-html5-backend';
+import { useDrag } from "react-dnd";
+import { getEmptyImage } from "react-dnd-html5-backend";
 
-const components = [{ id: 1001, text: "Text" }, { id: 1002, text: "View"}, { id: 1003, text: "Box" }];
+const components = [
+  { id: 1001, text: "Text" },
+  { id: 1002, text: "View" },
+  { id: 1003, text: "Box" },
+  { id: 1004, text: "Button" }
+];
 
 export default () => {
-  const Row = ({id, text}) => {
-        const [collectedProps, drag, preview] = useDrag({
-           item: { id, text, type: 'treenode'  },
-        })
-      
-      	useEffect(() => {
-		    preview(getEmptyImage(), { captureDraggingState: true })
-	    }, []);
+  const Row = ({ id, text }) => {
+    const [collectedProps, drag, preview] = useDrag({
+      item: { id, text, type: "treenode" },
+      begin: monitor => {
+        window.draggingNow = text;
+      }
+    });
 
-      return <div ref={drag} 
-         style={{ margin: 10, borderWidth: 2, borderColor: "#aaa", borderStyle: "dashed", color: "#aaa", width: 50, height: 50, fontSize: 11 , display: "flex", alignItems: "center", justifyContent: "center"}}>
-            {text} 
-          </div>
-  }
+    useEffect(() => {
+      preview(getEmptyImage(), { captureDraggingState: true });
+    }, []);
 
-  return <div>
-    {components.map(c => <Row id={c.id} text={c.text} />)}
-  </div>
+    return (
+      <div
+        ref={drag}
+        style={{
+          margin: 10,
+          borderWidth: 2,
+          borderColor: "#aaa",
+          borderStyle: "dashed",
+          color: "#aaa",
+          width: 50,
+          height: 50,
+          fontSize: 11,
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center"
+        }}
+      >
+        {text}
+      </div>
+    );
+  };
 
-
-
-}
+  return (
+    <div>
+      {components.map(c => (
+        <Row id={c.id} text={c.text} />
+      ))}
+    </div>
+  );
+};
